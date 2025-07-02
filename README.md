@@ -1,233 +1,328 @@
 
 # Store Management System
 
-A comprehensive frontend-only store management web application built with React, Vite, and Tailwind CSS. This application features four distinct portals for different user types: Customer, Storekeeper, Employee, and Admin.
+A comprehensive full-stack store management web application built with React, Express, MongoDB, and Tailwind CSS. Features four specialized portals for different user types with real-time inventory management, customer tracking, and advanced analytics.
 
-## 🎯 Features
+## 🚀 Features
 
 ### Customer Portal
-- **Authentication**: Phone number + OTP login (demo OTP: 1234)
-- **Order History**: View past orders with details and status
-- **Product Search**: Search products by name or category
-- **Store Navigation**: Interactive 10x5 store map with product location highlighting
-- **Loyalty Points**: View points balance and available discounts
+- **Authentication**: Phone number + OTP login
+- **Order History**: Complete purchase history with filtering
+- **Product Search**: Real-time search with store navigation
+- **Store Map**: Interactive 10x5 grid layout with product location highlighting
+- **Loyalty Points**: Points tracking and discount system
 - **Product Recommendations**: AI-powered suggestions based on purchase history
 
-### Storekeeper Portal (Coming Soon)
-- Stock management (view, update, add, delete products)
-- Order registration with customer linking
-- Loyalty points calculation and discount application
-- Alert system for employee communication
+### Storekeeper Portal
+- **Stock Management**: Full CRUD operations for inventory
+- **Order Registration**: Process customer orders with automatic calculations
+- **Loyalty System**: Automated points assignment and discount application
+- **Alert System**: Send notifications to employees
+- **Real-time Updates**: Live inventory tracking
 
-### Employee Portal (Coming Soon)
-- Alert management (pending/delivered status)
-- Task tracking and completion
-- Work dashboard with assigned tasks
+### Employee Portal
+- **Task Management**: View and manage assigned tasks
+- **Alert System**: Receive and acknowledge notifications
+- **Work Tracking**: Log task completion with timestamps
+- **Dashboard**: Overview of pending work and alerts
 
-### Admin Portal (Coming Soon)
-- Full CRUD operations for all data
-- User management (storekeepers, employees, customers)
-- Order overview and reporting
-- Low-stock alerts and inventory management
+### Admin Portal
+- **User Management**: Manage all system users
+- **Advanced Analytics**: Sales reports and inventory insights
+- **System Control**: Full CRUD operations across all entities
+- **Data Export**: CSV import/export functionality
+- **Low Stock Alerts**: Automated inventory warnings
 
-## 🚀 Quick Start
+## 🛠 Tech Stack
+
+### Frontend
+- **React 18** with Vite for fast development
+- **Tailwind CSS** for modern, responsive design
+- **Shadcn/ui** components for consistent UI/UX
+- **React Router** for navigation
+- **Context API** for state management
+
+### Backend
+- **Express.js** for RESTful API
+- **MongoDB** with Mongoose for data modeling
+- **JWT** for authentication
+- **CORS** enabled for cross-origin requests
+- **Error handling** middleware
+
+### Design System
+- **Colors**: Light blue (#60A5FA) and white (#FFFFFF)
+- **Typography**: Inter font family
+- **Mobile-first**: Responsive design with touch-friendly elements
+- **Animations**: Smooth transitions and hover effects
+
+## 📦 Installation
 
 ### Prerequisites
 - Node.js (v16 or higher)
-- npm or yarn
+- MongoDB Atlas account
+- Git
 
-### Installation
+### Backend Setup
 
 1. **Clone the repository**
    ```bash
-   git clone <your-github-repo-url>
+   git clone <repository-url>
    cd store-management-system
    ```
 
-2. **Install dependencies**
+2. **Install backend dependencies**
    ```bash
+   cd backend
    npm install
    ```
 
-3. **Start the development server**
+3. **Environment Configuration**
+   Create a `.env` file in the backend directory:
+   ```env
+   MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/storemanagement
+   PORT=5000
+   JWT_SECRET=your-jwt-secret-key
+   NODE_ENV=development
+   ```
+
+4. **Seed the database**
+   ```bash
+   npm run seed
+   ```
+
+5. **Start the backend server**
    ```bash
    npm run dev
    ```
 
-4. **Open your browser**
-   Navigate to `http://localhost:5173` to view the application.
+### Frontend Setup
 
-## 🎨 Design System
+1. **Install frontend dependencies**
+   ```bash
+   cd ../frontend
+   npm install
+   ```
 
-- **Primary Color**: Light Blue (#60A5FA)
-- **Secondary Color**: White (#FFFFFF)
-- **Font**: Inter (Google Fonts)
-- **Framework**: Tailwind CSS with custom utility classes
-- **Components**: Shadcn/ui component library
+2. **Start the development server**
+   ```bash
+   npm run dev
+   ```
 
-## 📊 Mock Data Structure
+3. **Access the application**
+   Open [http://localhost:5173](http://localhost:5173) in your browser
 
-The application uses comprehensive mock data to simulate backend functionality:
+## 🗄 Database Schema
 
-### Products (100 items)
+### Collections
+
+#### Customers
 ```javascript
 {
-  productId: "P001",
-  name: "Whole Milk",
-  category: "Dairy",
-  price: 3.99,
-  stockQuantity: 45,
-  aisle: "Aisle 1",
-  shelf: "Shelf A"
+  phoneNumber: String (unique),
+  name: String,
+  loyaltyPoints: Number,
+  orderHistory: [String] // Order IDs
 }
 ```
 
-### Customers (50 users)
+#### Products
 ```javascript
 {
-  phoneNumber: "5551234567", // Unique ID
-  name: "Alice Johnson",
-  loyaltyPoints: 125,
-  orderHistory: ["ORD001", "ORD015"]
+  productId: String (unique),
+  name: String,
+  category: String,
+  price: Number,
+  stockQuantity: Number,
+  aisle: String,
+  shelf: String
 }
 ```
 
-### Orders (100 orders)
+#### Orders
 ```javascript
 {
-  orderId: "ORD001",
-  customerId: "5551234567",
-  items: [{ productId, name, quantity, price }],
-  orderDate: "2024-06-15",
-  totalAmount: 13.46,
-  status: "Completed"
+  orderId: String (unique),
+  customerId: String,
+  items: [{
+    productId: String,
+    name: String,
+    quantity: Number,
+    price: Number
+  }],
+  orderDate: Date,
+  totalAmount: Number,
+  status: String
 }
 ```
 
-## 🔧 Backend Integration (TODO)
-
-The application is designed to seamlessly integrate with a MongoDB backend. Key integration points:
-
-### API Service Layer
+#### Employees
 ```javascript
-// src/services/api.js (to be implemented)
-// TODO: Replace mock data with MongoDB API calls
-
-const fetchProducts = async () => {
-  // TODO: Replace with GET /api/products from Express server
-  return mockProducts;
-};
-
-const createOrder = async (orderData) => {
-  // TODO: Replace with POST /api/orders to MongoDB
-  return mockOrderResponse;
-};
+{
+  employeeId: String (unique),
+  name: String,
+  email: String,
+  alerts: [{
+    alertId: String,
+    message: String,
+    timestamp: Date,
+    status: String
+  }]
+}
 ```
 
-### Required Backend Endpoints
-- `GET /api/products` - Fetch all products
+#### Alerts
+```javascript
+{
+  alertId: String (unique),
+  message: String,
+  employeeId: String,
+  timestamp: Date,
+  status: String
+}
+```
+
+## 🌐 API Endpoints
+
+### Customers
+- `GET /api/customers` - Get all customers
+- `GET /api/customers/:phoneNumber` - Get customer by phone
+- `POST /api/customers` - Create new customer
+- `PUT /api/customers/:phoneNumber` - Update customer
+- `DELETE /api/customers/:phoneNumber` - Delete customer
+
+### Products
+- `GET /api/products` - Get all products (supports ?name and ?category filters)
+- `GET /api/products/:productId` - Get product by ID
 - `POST /api/products` - Create new product
-- `PUT /api/products/:id` - Update product
-- `DELETE /api/products/:id` - Delete product
-- `GET /api/orders` - Fetch orders
+- `PUT /api/products/:productId` - Update product
+- `DELETE /api/products/:productId` - Delete product
+
+### Orders
+- `GET /api/orders` - Get all orders (supports filtering)
+- `GET /api/orders/:orderId` - Get order by ID
 - `POST /api/orders` - Create new order
-- `GET /api/customers/:phone` - Fetch customer by phone
-- `POST /api/alerts` - Send alert to employee
-- `PUT /api/alerts/:id` - Update alert status
+- `PUT /api/orders/:orderId` - Update order
+- `DELETE /api/orders/:orderId` - Delete order
 
-### Environment Variables (Backend)
-```env
-MONGODB_URI=mongodb+srv://<username>:<password>@cluster.mongodb.net/store_management
-JWT_SECRET=your_jwt_secret_key
-NODE_ENV=production
-```
+### Employees
+- `GET /api/employees` - Get all employees
+- `GET /api/employees/:employeeId` - Get employee by ID
+- `POST /api/employees` - Create new employee
+- `PUT /api/employees/:employeeId` - Update employee
+- `DELETE /api/employees/:employeeId` - Delete employee
 
-## 🗂️ Project Structure
+### Alerts
+- `GET /api/alerts` - Get all alerts (supports ?employeeId filter)
+- `GET /api/alerts/:alertId` - Get alert by ID
+- `POST /api/alerts` - Create new alert
+- `PUT /api/alerts/:alertId` - Update alert
+- `DELETE /api/alerts/:alertId` - Delete alert
 
-```
-src/
-├── components/
-│   ├── ui/              # Shadcn/ui components
-│   ├── portals/         # Portal-specific components
-│   ├── Layout.jsx       # Main layout wrapper
-│   └── PortalSelector.jsx
-├── context/
-│   ├── AuthContext.jsx  # Authentication state management
-│   └── DataContext.jsx  # Mock data management
-├── data/
-│   ├── products.js      # 100 sample products
-│   ├── customers.js     # 50 sample customers
-│   ├── orders.js        # 100 sample orders
-│   ├── employees.js     # 10 sample employees
-│   └── alerts.js        # 20 sample alerts
-├── services/            # API integration layer (to be implemented)
-└── App.tsx             # Main application component
-```
-
-## 🧪 Demo Credentials
-
-### Customer Portal
-- **Phone Number**: Any number from mock data (e.g., 5551234567)
-- **OTP**: 1234 (static demo code)
-
-### Other Portals
-- **Email**: Any email address
-- **Password**: Any password
-- Currently shows placeholder login screens
-
-## 🚢 Deployment
+## 🚀 Deployment
 
 ### Frontend (Vercel)
-1. Connect your GitHub repository to Vercel
-2. Deploy automatically on push to main branch
-3. Environment variables: None required for frontend-only version
 
-### Backend (Render/Railway)
-1. Create Node.js service
-2. Connect to MongoDB Atlas
-3. Set environment variables
-4. Deploy Express server with MongoDB integration
+1. **Build the project**
+   ```bash
+   npm run build
+   ```
 
-## 🔄 Development Roadmap
+2. **Deploy to Vercel**
+   ```bash
+   npm install -g vercel
+   vercel --prod
+   ```
 
-### Phase 1 ✅
-- [x] Project setup and mock data
-- [x] Customer Portal with full functionality
-- [x] Authentication system (mock)
-- [x] Store map and navigation
-- [x] Product search and recommendations
+3. **Environment Variables**
+   Set `VITE_API_URL` to your backend URL in Vercel dashboard
 
-### Phase 2 🚧
-- [ ] Storekeeper Portal implementation
-- [ ] Employee Portal implementation
-- [ ] Admin Portal implementation
-- [ ] Real-time alerts with WebSocket
+### Backend (Render)
 
-### Phase 3 📋
-- [ ] MongoDB backend integration
-- [ ] JWT authentication
-- [ ] API service layer
-- [ ] Production deployment
+1. **Create a new Web Service on Render**
+   - Connect your GitHub repository
+   - Set build command: `cd backend && npm install`
+   - Set start command: `cd backend && npm start`
+
+2. **Environment Variables**
+   Add the following in Render dashboard:
+   ```
+   MONGODB_URI=your-mongodb-atlas-uri
+   JWT_SECRET=your-jwt-secret
+   NODE_ENV=production
+   ```
+
+3. **Database Setup**
+   - Create MongoDB Atlas cluster
+   - Configure network access and database user
+   - Run seed script: `npm run seed`
+
+## 📱 Mobile Support
+
+The application is fully responsive with:
+- Touch-friendly 48px minimum button sizes
+- Mobile-optimized navigation
+- Swipeable product carousels
+- Responsive grid layouts
+- Bottom navigation for mobile devices
+
+## 🎨 UI/UX Features
+
+- **Smooth Animations**: Fade-ins, scale effects, and transitions
+- **Modern Design**: Glass morphism and gradient backgrounds
+- **Accessibility**: WCAG compliant with proper contrast ratios
+- **Loading States**: Skeleton UI and loading spinners
+- **Toast Notifications**: Real-time feedback for user actions
+- **Error Handling**: Graceful error messages and fallbacks
+
+## 🔧 Development
+
+### Available Scripts
+
+#### Backend
+- `npm run dev` - Start development server with nodemon
+- `npm start` - Start production server
+- `npm run seed` - Seed database with sample data
+
+#### Frontend
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build
+
+### Code Structure
+
+```
+store-management-system/
+├── backend/
+│   ├── models/          # Mongoose schemas
+│   ├── routes/          # Express routes
+│   ├── server.js        # Main server file
+│   ├── seed.js          # Database seeding
+│   └── package.json
+├── src/
+│   ├── components/      # React components
+│   ├── context/         # React Context providers
+│   ├── data/           # Mock data (development)
+│   ├── services/       # API service layer
+│   └── App.tsx         # Main app component
+└── README.md
+```
 
 ## 🤝 Contributing
 
 1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/amazing-feature`
-3. Commit your changes: `git commit -m 'Add amazing feature'`
-4. Push to the branch: `git push origin feature/amazing-feature`
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## 📝 License
+## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-## 🙏 Acknowledgments
+## 🆘 Support
 
-- **Shadcn/ui** for the beautiful component library
-- **Tailwind CSS** for the utility-first CSS framework
-- **React** and **Vite** for the amazing development experience
-- **Lovable AI** for the rapid prototyping capabilities
+For support, please open an issue in the GitHub repository or contact the development team.
 
 ---
 
-**Note**: This is currently a frontend-only demonstration. Backend integration with MongoDB, Express, and Node.js will be implemented in a separate repository as outlined in the integration comments throughout the codebase.
+**Built with ❤️ using React, Express, MongoDB, and Tailwind CSS**

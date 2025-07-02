@@ -42,15 +42,19 @@ const App = () => {
     <TooltipProvider>
       <AuthProvider>
         <DataProvider>
-          <div className="min-h-screen bg-white">
+          <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white font-inter">
             <Toaster />
             <Sonner />
             {selectedPortal ? (
               <Layout>
-                {renderPortal()}
+                <div className="animate-fade-in">
+                  {renderPortal()}
+                </div>
               </Layout>
             ) : (
-              renderPortal()
+              <div className="animate-fade-in">
+                {renderPortal()}
+              </div>
             )}
           </div>
         </DataProvider>
