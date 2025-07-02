@@ -1,27 +1,62 @@
+
+import React, { useState } from 'react';
+import { AuthProvider } from './context/AuthContext';
+import { DataProvider } from './context/DataContext';
+import PortalSelector from './components/PortalSelector';
+import CustomerPortal from './components/portals/CustomerPortal';
+import StorekeeperPortal from './components/portals/StorekeeperPortal';
+import EmployeePortal from './components/portals/EmployeePortal';
+import AdminPortal from './components/portals/AdminPortal';
+import Layout from './components/Layout';
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Index from "./pages/Index";
-import NotFound from "./pages/NotFound";
 
-const queryClient = new QueryClient();
+const App = () => {
+  const [selectedPortal, setSelectedPortal] = useState(null);
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
+  const handlePortalSelect = (portalId) => {
+    setSelectedPortal(portalId);
+  };
+
+  const handleBackToSelection = () => {
+    setSelectedPortal(null);
+  };
+
+  const renderPortal = () => {
+    switch (selectedPortal) {
+      case 'customer':
+        return <CustomerPortal onBack={handleBackToSelection} />;
+      case 'storekeeper':
+        return <StorekeeperPortal onBack={handleBackToSelection} />;
+      case 'employee':
+        return <EmployeePortal onBack={handleBackToSelection} />;
+      case 'admin':
+        return <AdminPortal onBack={handleBackToSelection} />;
+      default:
+        return <PortalSelector onSelectPortal={handlePortalSelect} />;
+    }
+  };
+
+  return (
     <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+      <AuthProvider>
+        <DataProvider>
+          <div className="min-h-screen bg-white">
+            <Toaster />
+            <Sonner />
+            {selectedPortal ? (
+              <Layout>
+                {renderPortal()}
+              </Layout>
+            ) : (
+              renderPortal()
+            )}
+          </div>
+        </DataProvider>
+      </AuthProvider>
     </TooltipProvider>
-  </QueryClientProvider>
-);
+  );
+};
 
 export default App;
